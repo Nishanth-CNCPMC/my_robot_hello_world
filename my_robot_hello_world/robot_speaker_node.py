@@ -6,15 +6,24 @@ class RobotSpeaker(Node):
 
     def __init__(self):
         super().__init__('robot_speaker_node')
+        # Declare a parameter for speaking rate
+        self.declare_parameter('speaking_rate_sec', 2.0) # Default to 2.0 seconds
+
         self.publisher_ = self.create_publisher(String, 'robot_chatter', 10)
-        timer_period = 2.0  # seconds
+
+        # Get the parameter value
+        timer_period = self.get_parameter('speaking_rate_sec').get_parameter_value().double_value
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
-        self.get_logger().info('RobotSpeaker node started!')
+        self.get_logger().info('RobotSpeaker node started with rate: %f seconds!' % timer_period)
 
     def timer_callback(self):
+        # ... (rest of your timer_callback remains the same)
         msg = String()
-        msg.data = f'Hello, world! ({self.i})'
+        if self.i % 5 == 0: # Say goodbye every 5th message
+            msg.data = f'Goodbye, world! ({self.i})'
+        else:
+            msg.data = f'Hello, world! ({self.i})'
         self.publisher_.publish(msg)
         self.get_logger().info(f'Publishing: "{msg.data}"')
         self.i += 1
