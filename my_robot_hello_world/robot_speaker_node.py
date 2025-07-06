@@ -15,7 +15,7 @@ class RobotSpeaker(Node):
         timer_period = self.get_parameter('speaking_rate_sec').get_parameter_value().double_value
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
-        self.get_logger().info('RobotSpeaker node started with rate: %f seconds!' % timer_period)
+        self.get_logger().info('RobotSpeaker node initialized and speaking at %f second intervals.' % timer_period)
 
     def timer_callback(self):
         # ... (rest of your timer_callback remains the same)
